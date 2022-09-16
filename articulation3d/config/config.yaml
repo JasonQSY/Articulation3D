@@ -309,8 +309,8 @@ MODEL:
     NORM: GN
     NUM_CLASSES: 54
   VIS_MINIBATCH: false
-  WEIGHTS: exps/model_0059999.pth
-OUTPUT_DIR: /Pool1/users/jinlinyi/exp/p-arti/planercnn/e06_step3_artiPlane_v4
+  WEIGHTS: exps/model_final.pth
+OUTPUT_DIR: exps/inference
 SEED: -1
 SOLVER:
   AMP:

@@ -63,13 +63,14 @@ cd articulation3d
 pip install -e .
 ```
 
-If necessary, download our [pretrained model](https://www.dropbox.com/s/50uderl5ynan2yt/model_0059999.pth?dl=0) and put it at `exps/model_0059999.pth`
+Create `exps` for all experiments.
 
 ```bash
 mkdir exps
-cd exps
-wget https://www.dropbox.com/s/50uderl5ynan2yt/model_0059999.pth?dl=0
 ```
+
+If necessary, download our [pretrained model](https://drive.google.com/file/d/1ZBhUqoflC57JLd0DjOZAzErhN4fDV3c6/view?usp=sharing) and put it at `exps/model_final.pth`
+
 
 ## Dataset
 
