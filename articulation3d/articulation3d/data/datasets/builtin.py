@@ -30,10 +30,10 @@ def get_arti_metadata():
 
 
 SCANNET_SPLITS = {
-    "scannet_surreal_val": ("scannet_surreal", "scannetv2_surreal/cached_set_val.json"),
-    "scannet_surreal_train": ("scannet_surreal", "scannetv2_surreal/cached_set_train.json"),
-    "scannet_val": ("scannet", "scannetv2/cached_set_val.json"),
-    "scannet_train": ("scannet", "scannetv2/cached_set_train.json"),
+    "scannet_surreal_val": ("scannet_surreal", "scannet_surreal/cached_set_val.json"),
+    "scannet_surreal_train": ("scannet_surreal", "scannet_surreal/cached_set_train.json"),
+    "scannet_val": ("scannet", "scannet/cached_set_val.json"),
+    "scannet_train": ("scannet", "scannet/cached_set_train.json"),
 }
 
 ARTI_SPLITS = {

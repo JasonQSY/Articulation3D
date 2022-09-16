@@ -71,6 +71,17 @@ cd exps
 wget https://www.dropbox.com/s/50uderl5ynan2yt/model_0059999.pth?dl=0
 ```
 
+## Dataset
+
+Our Internet video dataset can be downloaded on the project [website](https://jasonqsy.github.io/Articulation3D/). Put annotations under `datasets`. It should look like `articulation3d/datasets/articulation/cached_set_train.json`.
+
+Our supplemental ScanNet dataset with synthetic humans can also be downloaded on the project [website](https://jasonqsy.github.io/Articulation3D/).
+
+1. Download the original ScanNet dataset from http://www.scan-net.org/
+2. Download our rendered SURREAL images and extract it into the ScanNet folder.
+3. Put ScanNet plane annotations under `datasets`. It should look like `articulation3d/datasets/scannet_surreal/cached_set_train.json`.
+
+
 ## Inference
 
 To run the model and temporal optimization on a video,

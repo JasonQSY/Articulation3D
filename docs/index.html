@@ -135,6 +135,7 @@
           <left>
             <center>
               <h1>Dataset</h1>
+              <h3>Internet videos</h3>
             </center>
           </left>
         </td>
@@ -155,7 +156,7 @@
         <td>Negative Clips</td>
         <td><a href='https://drive.google.com/file/d/1S6o0VnaLl3o7z9ZinLvwbOZrWKe8FZp9/view?usp=sharing'>neg_clips.tar.gz</a></td>
         <td>For each positive video clip, we try to sample a negative clip (no articulation) in the same scene with a hand motion. This is used for the recogition benchmark.</td>
-    </tr>
+      </tr>
       <tr>
           <td>Frames</td>
           <td><a href='https://drive.google.com/file/d/1aO5C2WyD4BEZwihuS5x5XUMj99ztqQjb/view?usp=sharing'>articulation_frames_v1.tar.gz</a></td>
@@ -165,6 +166,40 @@
           <td>Annotations</td>
           <td><a href='https://drive.google.com/file/d/1fctqYS41hg9TW1d0mhq6eKQraZIUT1Pg/view?usp=sharing'>articulation_annotations_v1.tar.gz</a></td>
           <td>Articulation annotations. Surface normals are only available in the test split. We have preprocessed annotations to COCO format.</td>
+      </tr>
+    </table>
+    <br><br>
+    <table align=center width=1100px>
+      <tr>
+        <td>
+          <left>
+            <center>
+              <h3>ScanNet</h3>
+            </center>
+          </left>
+        </td>
+      </tr>
+    </table>
+    <table id="customers" align=center width=1000px>
+      <tr>
+          <th width=14%>Category</th>
+          <th width=23%>Links</th>
+          <th>Details</th>
+      </tr>
+      <tr>
+        <td>Annotations</td>
+        <td><a href='https://drive.google.com/file/d/1AH98ghx7dFT8oycBEBwL0eAKSUMbv7aI/view?usp=sharing'>scannet_annotations.tar.gz</a></td>
+        <td>ScanNet plane annotations. It is preprocessed by <a href="https://jinlinyi.github.io/SparsePlanes/">SparsePlanes</a>.</td>
+      </tr>
+      <tr>
+        <td>SURREAL images</td>
+        <td><a href='https://drive.google.com/file/d/1lqeunygM_bPkjXmauI5TCx8C8ZqwboK8/view?usp=sharing'>scannet_surreal_imgs.tar.gz</a></td>
+        <td>We render synthetic humans on around 98k ScanNet images. You can extract it to the ScanNet folder.</td>
+      </tr>
+      <tr>
+        <td>SURREAL annotations</td>
+        <td><a href='https://drive.google.com/file/d/1dAQ3QF8rZUsR8x8K4CxA5AEMn5lQFega/view?usp=sharing'>scannet_surreal_annotations.tar.gz</a></td>
+        <td>The same plane annotations but we change image path to SURREAL images.</td>
       </tr>
     </table>
     <br><br>
