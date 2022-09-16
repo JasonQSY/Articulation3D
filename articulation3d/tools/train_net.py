@@ -14,7 +14,7 @@ from detectron2.evaluation import inference_on_dataset
 from detectron2.utils.logger import setup_logger
 
 # required so that .register() calls are executed in module scope
-import planercnn.modeling  # noqa
+import articulation3d.modeling  # noqa
 from articulation3d.config import get_planercnn_cfg_defaults
 from articulation3d.data import PlaneRCNNMapper
 from articulation3d.evaluation import ScannetEvaluator, ArtiEvaluator
@@ -76,8 +76,8 @@ def setup(args):
     cfg.merge_from_list(args.opts)
     cfg.freeze()
     default_setup(cfg, args)
-    # Setup logger for "meshrcnn" module
-    setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="planercnn")
+    # Setup logger for "articulation3d" module
+    setup_logger(output=cfg.OUTPUT_DIR, distributed_rank=comm.get_rank(), name="articulation3d")
     return cfg
 
 
@@ -92,7 +92,6 @@ def main(args):
         res = Trainer.test(cfg, model)
         print(res)
         return res
-
 
     trainer = Trainer(cfg)
 
