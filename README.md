@@ -119,6 +119,14 @@ In the final stage, we train the plane head on ScanNet images.
 python tools/train_net.py --config-file config/step3_plane.yaml
 ```
 
+## Evaluation
+
+For evaluation, run
+
+```bash
+python tools/opt_arti.py --config-file config/config.yaml --input <pth_file> --output output
+```
+
 ## Acknowledgment
 
 We reuse the codebase of [SparsePlanes](https://github.com/jinlinyi/SparsePlanes) and [Mesh R-CNN](https://github.com/facebookresearch/meshrcnn).

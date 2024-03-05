@@ -1,21 +1,14 @@
 import argparse
-import json
 import numpy as np
 import os
 import torch
 import torch.nn.functional as F
-from collections import defaultdict
 import cv2
 from tqdm import tqdm
-import pickle
-import pdb
 import imageio
 import random
 import math
 from glob import glob
-#import multiprocessing
-#from multiprocessing import Pool, Process, Queue
-#from scipy.optimize import linear_sum_assignment
 
 import pycocotools.mask as mask_util
 from fvcore.common.file_io import PathManager
@@ -37,20 +30,6 @@ from planercnn.utils.opt_utils import track_planes, optimize_planes, check_monot
 from planercnn.utils.arti_vis import create_instances, PlaneRCNN_Branch, draw_pred, draw_gt, get_normal_map
 
 
-select_video_ids = [
-    '3NP8Ik1IU_E_9_270',
-    '5VzUcobbAKM_11_1440',
-    '5Z6p9oaUgRE_8_3240',
-    'DZenfiAzE_o_17_90',
-    'HbAQdXvuMSU_89_0',
-    'TcCFnasD074_23_630',
-    'TvcDRt_ty9A_105_0',
-    'epsCb5vx1OI_21_90',
-    'epsCb5vx1OI_24_3240',
-    'rYuurd1Ts4M_1_1350',
-]
-
-
 def main():
     random.seed(2020)
     np.random.seed(2020)
@@ -58,7 +37,7 @@ def main():
 
     # command line arguments
     parser = argparse.ArgumentParser(
-        description="A script that visualizes the json predictions from COCO or LVIS dataset."
+        description="A script that run temporal optimization and generate benchmark results."
     )
     parser.add_argument("--config", required=True, help="config.yaml")
     parser.add_argument('--load-results', action='store_true')
@@ -85,7 +64,6 @@ def main():
         filename = file_path.split('/')[-1]
         file_prefix = filename.replace('.png', '')
         youtube_id = file_prefix[:11]
-        #pdb.set_trace()
         splits = file_prefix.split('_')
         shot_id = int(splits[-3])
         frame_id = int(splits[-2])
@@ -97,18 +75,14 @@ def main():
             pred_by_video[video_id] = {}
         pred_by_video[video_id][frame_offset] = p
 
-
     os.makedirs(args.output, exist_ok=True)
     metadata = MetadataCatalog.get(args.dataset)
     dicts = list(DatasetCatalog.get(args.dataset))
-    #if args.vis_num != -1:
-    #    dicts = np.random.choice(dicts, args.vis_num, replace=False).tolist()
     
     # collect ground truth
     gt_by_frame = {}
     for d in dicts:
         file_path = d['file_name']
-        #pdb.set_trace()
         filename = file_path.split('/')[-1]
         file_prefix = filename.replace('.png', '')
         youtube_id = file_prefix[:11]
@@ -165,7 +139,6 @@ def main():
                 corr_opt = data['corrs_opt']
                 corrs_opt.extend(corr_opt)
 
-        #pdb.set_trace()
         corrs = np.array(corrs)
         corrs = corrs[np.logical_not(np.isnan(corrs))]
         corrs = np.abs(corrs)
@@ -174,7 +147,6 @@ def main():
         corrs_opt = np.abs(corrs_opt)
         print(corrs.mean())
         print(corrs_opt.mean())
-        #pdb.set_trace()
 
         evaluator = ArtiEvaluator(args.dataset, cfg, False, output_dir=args.output)
         evaluator.reset()
@@ -184,17 +156,11 @@ def main():
         print(eval_results)
         return
 
-    
-    #pdb.set_trace()
-
-    # just for vis
-    #video_ids = select_video_ids
 
     predictions = []
     corrs = []
     corrs_opt = []
     for video_id in tqdm(video_ids):
-        #print(video_id)
         org_vis_list = []
         video_path = os.path.join('/home/syqian/articulation_data/step2_filtered_clips', '{}.mp4'.format(video_id))
         if not os.path.exists(video_path):
@@ -230,20 +196,15 @@ def main():
                     normal_vis = get_normal_map(p_instance.pred_planes, p_instance.pred_masks.cpu())
 
                 # combine visualization and generate output
-                #combined_vis = np.concatenate((seg_pred, normal_vis), axis=1)
                 combined_vis = seg_pred
                 org_vis_list.append(combined_vis)
 
         reader.close()
 
-        #pdb.set_trace()
+        # temporal optimization
         planes = track_planes(preds)
-        #corr = check_monotonic(preds, planes['rot'], 'debug')
-        #
         opt_preds = optimize_planes(preds, planes, '3dc', frames=frames)
-        #opt_preds = optimize_planes(preds, planes, '3d', frames=frames)
-        #opt_preds = preds
-        
+
         corr, corr_opt = check_axis(preds, opt_preds, planes['rot'], 'debug')
         #corr, corr_opt = check_monotonic(preds, opt_preds, planes['rot'], 'debug')
         corrs.extend(corr)
@@ -314,10 +275,6 @@ def main():
             # after optimization
             p_instance = opt_preds[frame_offset]
 
-            #if 1 in p_instance.pred_classes:
-            #    pdb.set_trace()
-            #    pass
-
             try:
                 seg_pred = draw_pred(vis, p_instance, metadata, cls_name_map, conf_threshold=args.conf_threshold)
                 if len(p_instance.pred_boxes) == 0:
@@ -330,9 +287,6 @@ def main():
                 gt_anno = gt_by_frame[gt_id]
                 gt_vis = draw_gt(gt_vis, gt_anno, metadata, cls_name_map)
 
-                #combined_vis = np.concatenate((gt_vis, seg_pred, normal_vis, org_vis), axis=1)
-                #imageio.imwrite(os.path.join(args.vis_dir, '{}_{}.png'.format(video_id, frame_offset)), combined_vis)
-                
                 # for vis in the paper
                 imageio.imwrite(os.path.join(args.vis_dir, '{}_{}_raw.png'.format(video_id, frame_offset)), org_vis)
                 imageio.imwrite(os.path.join(args.vis_dir, '{}_{}_gt.png'.format(video_id, frame_offset)), gt_vis)
@@ -343,7 +297,6 @@ def main():
                 continue
 
         continue
-        #return
 
         # video visualization
         writer = imageio.get_writer(os.path.join(args.vis_dir, '{}.mp4'.format(video_id)), fps=fps)
@@ -379,34 +332,6 @@ def main():
             combined_vis = np.concatenate((seg_pred, normal_vis, org_vis), axis=1)
             writer.append_data(combined_vis)
 
-    """
-    num_gpu = 4
-    num_process = 2
-    p = Pool(num_process)
-    #multiprocessing.set_start_method('spawn')
-    n = math.ceil(len(video_ids) / num_process)
-    video_id_subsets = [video_ids[i:i + n] for i in range(0, len(video_ids), n)]
-    #run_opt(video_id, args, model, metadata, cls_name_map, pred_by_video, gt_by_frame)
-    opt_args = []
-    for gpu_id, video_id_subset in enumerate(video_id_subsets):
-        opt_args.append([video_id_subset, opt_args, gpu_id, metadata, cls_name_map, pred_by_video, gt_by_frame])
-    predictions = p.starmap(run_opt, opt_args)
-
-    pdb.set_trace()
-
-    for video_id in tqdm(video_ids):
-        # video processing
-
-    #if video_id != '6CrBGpt0DQw_0_450':
-    #   continue
-
-        
-    evaluator._predictions = predictions
-
-            
-
-    
-    """
     
     if os.environ.get('SLURM_ARRAY_TASK_ID') is not None:
         #PathManager.mkdirs(output_dir)
