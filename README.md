@@ -69,7 +69,7 @@ Create `exps` for all experiments.
 mkdir exps
 ```
 
-If necessary, download our [pretrained model](https://drive.google.com/file/d/1ZBhUqoflC57JLd0DjOZAzErhN4fDV3c6/view?usp=sharing) and put it at `exps/model_final.pth`
+If necessary, download our [pretrained model](https://fouheylab.eecs.umich.edu/~syqian/articulation3d/model_final.tar.gz) and put it at `exps/model_final.pth`
 
 
 ## Dataset
